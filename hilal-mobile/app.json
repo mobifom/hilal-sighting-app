@@ -1,0 +1,62 @@
+{
+  "expo": {
+    "name": "Hilal",
+    "slug": "hilal-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0C1425"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hilal.moonsighting",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Hilal needs your location to calculate accurate prayer times and Qibla direction.",
+        "NSCameraUsageDescription": "Hilal needs camera access to capture moon sighting photos.",
+        "NSPhotoLibraryUsageDescription": "Hilal needs photo library access to select moon sighting evidence."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0C1425"
+      },
+      "package": "com.hilal.moonsighting",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#D4A843"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Hilal needs your location to calculate prayer times and Qibla direction."
+        }
+      ],
+      "expo-secure-store"
+    ],
+    "extra": {
+      "wpBaseUrl": "http://192.168.4.212:8888",
+      "useRestRoute": false
+    }
+  }
+}

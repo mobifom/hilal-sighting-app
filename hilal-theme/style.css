@@ -1,0 +1,1866 @@
+/*
+Theme Name: Hilal
+Theme URI: https://hilal.nz
+Author: Mohamed
+Author URI: https://hilal.nz
+Description: Islamic Moon Sighting Platform theme for New Zealand. Features Hijri calendar, moon sighting reports, prayer times, and Qibla direction with full Arabic/English bilingual support.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.4
+Requires PHP: 8.0
+License: GPL v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: hilal
+Tags: islamic, hijri-calendar, rtl-language-support, custom-colors, custom-menu
+
+This theme is GPL v2 licensed.
+*/
+
+/* ========================================
+   CSS Variables - Based on Hilal Wireframes v3
+   ======================================== */
+:root {
+    /* Dark Theme Colors (Admin/Hero) */
+    --hilal-dark-bg: #0C1425;
+    --hilal-dark-bg2: #131E36;
+    --hilal-dark-card: #19274A;
+    --hilal-dark-border: #243052;
+    --hilal-dark-text: #ECE6D8;
+    --hilal-dark-muted: #7E8FAB;
+    --hilal-dark-dim: #4E5F7E;
+
+    /* Gold Accent */
+    --hilal-gold: #D4A843;
+    --hilal-gold-dim: rgba(212, 168, 67, 0.12);
+    --hilal-gold-light: #B8922E;
+    --hilal-gold-bg: #FDF6E3;
+    --hilal-gold-border: #E8D5A0;
+
+    /* Light Theme Colors (Public Portal) */
+    --hilal-bg: #FAFAF6;
+    --hilal-card: #FFFFFF;
+    --hilal-text: #1C2537;
+    --hilal-muted: #6B7A90;
+    --hilal-border: #E2E6ED;
+
+    /* Status Colors */
+    --hilal-success: #48B07A;
+    --hilal-warning: #E2A33E;
+    --hilal-danger: #D45555;
+
+    /* Legacy mapping for compatibility */
+    --hilal-primary: var(--hilal-gold);
+    --hilal-primary-dark: var(--hilal-gold-light);
+    --hilal-secondary: var(--hilal-gold);
+    --hilal-white: #ffffff;
+    --hilal-gray-100: #F4F5F7;
+    --hilal-gray-200: var(--hilal-border);
+    --hilal-gray-300: #E2E6ED;
+    --hilal-gray-500: var(--hilal-muted);
+    --hilal-gray-700: #4E5F7E;
+    --hilal-gray-900: var(--hilal-text);
+
+    /* Typography */
+    --hilal-font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    --hilal-font-arabic: 'Noto Naskh Arabic', 'Traditional Arabic', 'Scheherazade', serif;
+    --hilal-font-size-base: 16px;
+    --hilal-line-height: 1.6;
+
+    /* Spacing */
+    --hilal-spacing-xs: 0.25rem;
+    --hilal-spacing-sm: 0.5rem;
+    --hilal-spacing-md: 1rem;
+    --hilal-spacing-lg: 1.5rem;
+    --hilal-spacing-xl: 2rem;
+    --hilal-spacing-2xl: 3rem;
+
+    /* Borders */
+    --hilal-border-radius: 8px;
+    --hilal-border-radius-lg: 12px;
+
+    /* Shadows */
+    --hilal-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --hilal-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hilal-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: var(--hilal-font-size-base);
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: var(--hilal-font-primary);
+    font-size: 1rem;
+    line-height: var(--hilal-line-height);
+    color: var(--hilal-gray-900);
+    background-color: var(--hilal-gray-100);
+}
+
+/* RTL Support */
+body.rtl {
+    direction: rtl;
+    font-family: var(--hilal-font-arabic), var(--hilal-font-primary);
+}
+
+a {
+    color: var(--hilal-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--hilal-primary-dark);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 var(--hilal-spacing-md);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--hilal-gray-900);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+p {
+    margin: 0 0 var(--hilal-spacing-md);
+}
+
+.text-ar {
+    font-family: var(--hilal-font-arabic), var(--hilal-font-primary);
+    direction: rtl;
+}
+
+/* ========================================
+   Layout
+   ======================================== */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--hilal-spacing-md);
+}
+
+.section {
+    padding: var(--hilal-spacing-2xl) 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--hilal-spacing-xl);
+}
+
+/* ========================================
+   Top Banner - Attractive Design
+   ======================================== */
+.top-banner {
+    position: relative;
+    background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    color: var(--hilal-white);
+    padding: 10px 0;
+    font-size: 0.875rem;
+    overflow: hidden;
+}
+
+.top-banner .banner-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(212, 168, 67, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(212, 168, 67, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.top-banner .container {
+    position: relative;
+    z-index: 1;
+}
+
+.top-banner .banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.top-banner .banner-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(212, 168, 67, 0.15);
+    border: 1px solid rgba(212, 168, 67, 0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--hilal-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.top-banner .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--hilal-gold);
+    border-radius: 50%;
+    animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.top-banner .banner-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+}
+
+.top-banner .banner-text strong {
+    color: var(--hilal-gold);
+    font-weight: 700;
+}
+
+.top-banner .banner-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--hilal-gold);
+    color: #0f172a;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.top-banner .banner-btn:hover {
+    background: var(--hilal-gold-light);
+    transform: translateX(2px);
+}
+
+.top-banner .banner-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.top-banner .banner-btn:hover svg {
+    transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+    .top-banner {
+        padding: 8px 0;
+    }
+
+    .top-banner .banner-content {
+        gap: 10px;
+    }
+
+    .top-banner .banner-text {
+        display: none;
+    }
+
+    .top-banner .banner-badge {
+        padding: 3px 10px;
+        font-size: 0.6875rem;
+    }
+
+    .top-banner .banner-btn {
+        padding: 5px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+/* ========================================
+   Header - Light theme with gold accents
+   ======================================== */
+.site-header {
+    background: var(--hilal-white);
+    color: var(--hilal-text);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--hilal-border);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+}
+
+.site-branding {
+    display: flex;
+    align-items: center;
+    gap: var(--hilal-spacing-md);
+    padding: 20px 0;
+}
+
+.site-logo {
+    width: 40px;
+    height: 40px;
+    font-size: 1.75rem;
+}
+
+.site-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--hilal-gold-light);
+    margin: 0;
+}
+
+.site-title a {
+    color: inherit;
+}
+
+.site-title a:hover {
+    color: var(--hilal-gold);
+}
+
+/* Navigation */
+.main-navigation {
+    display: flex;
+    align-items: center;
+    gap: var(--hilal-spacing-lg);
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+}
+
+.nav-menu li {
+    position: relative;
+}
+
+.nav-menu a {
+    display: block;
+    color: var(--hilal-muted);
+    padding: 1.5rem 1rem;
+    border-bottom: 3px solid transparent;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.nav-menu a:hover {
+    color: var(--hilal-gold);
+    background: rgba(212, 168, 67, 0.08);
+}
+
+.nav-menu .current-menu-item a,
+.nav-menu li.active a,
+.nav-menu a.active {
+    color: var(--hilal-gold);
+    font-weight: 600;
+    border-bottom-color: var(--hilal-gold);
+    background: rgba(212, 168, 67, 0.05);
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: var(--hilal-gold);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-menu a:hover::after {
+    width: 100%;
+}
+
+.nav-menu .current-menu-item a::after,
+.nav-menu li.active a::after,
+.nav-menu a.active::after {
+    width: 100%;
+}
+
+/* Language Switcher */
+.language-switcher {
+    display: flex;
+    gap: var(--hilal-spacing-sm);
+    align-items: center;
+}
+
+.lang-btn {
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid var(--hilal-border);
+    color: var(--hilal-muted);
+    border-radius: var(--hilal-border-radius);
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+    border-color: var(--hilal-gold);
+    color: var(--hilal-gold);
+}
+
+.lang-btn.active {
+    background: var(--hilal-gold);
+    border-color: var(--hilal-gold);
+    color: var(--hilal-white);
+}
+
+.btn-signin {
+    background: var(--hilal-gold);
+    color: var(--hilal-white);
+    border: none;
+    border-radius: var(--hilal-border-radius);
+    padding: 10px 20px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-signin:hover {
+    background: var(--hilal-gold-light);
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--hilal-text);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .main-navigation {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--hilal-white);
+        padding: var(--hilal-spacing-md);
+        flex-direction: column;
+        border-bottom: 1px solid var(--hilal-border);
+        box-shadow: var(--hilal-shadow);
+    }
+
+    .main-navigation.is-active {
+        display: flex;
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .nav-menu a {
+        display: block;
+        padding: 0.75rem 0;
+        border-bottom: none;
+    }
+}
+
+/* ========================================
+   Hijri Date Hero - Dark Navy with Gold
+   ======================================== */
+.hijri-date-hero {
+    background: linear-gradient(135deg, #1C2537 0%, var(--hilal-dark-bg) 50%, var(--hilal-dark-card) 100%);
+    color: var(--hilal-white);
+    text-align: center;
+    padding: 60px var(--hilal-spacing-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.hijri-date-hero::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 10%;
+    font-size: 60px;
+    opacity: 0.06;
+}
+
+.hijri-date-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    right: 15%;
+    font-size: 80px;
+    opacity: 0.04;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-icon {
+    font-size: 48px;
+    margin-bottom: var(--hilal-spacing-sm);
+}
+
+.hijri-date-display {
+    margin-bottom: var(--hilal-spacing-lg);
+}
+
+.hijri-day {
+    font-size: 3.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+    display: block;
+    color: var(--hilal-gold);
+}
+
+.hijri-month {
+    font-size: 1.5rem;
+    display: block;
+    margin-top: var(--hilal-spacing-xs);
+    color: var(--hilal-white);
+    opacity: 0.7;
+}
+
+.hijri-month-ar {
+    font-family: var(--hilal-font-arabic);
+    font-size: 1.5rem;
+    display: block;
+    color: var(--hilal-white);
+    opacity: 0.7;
+}
+
+.hijri-year {
+    font-size: 1rem;
+    color: var(--hilal-dark-muted);
+    margin-top: var(--hilal-spacing-sm);
+}
+
+.gregorian-date {
+    font-size: 0.875rem;
+    color: var(--hilal-dark-muted);
+    margin-top: var(--hilal-spacing-sm);
+}
+
+/* Countdown Timer */
+.countdown-wrapper {
+    display: inline-flex;
+    gap: 28px;
+    margin-top: 28px;
+    background: var(--hilal-gold-dim);
+    border-radius: 16px;
+    padding: 18px 36px;
+    border: 1px solid rgba(212, 168, 67, 0.2);
+}
+
+.countdown-item {
+    text-align: center;
+}
+
+.countdown-item .value {
+    color: var(--hilal-gold);
+    font-size: 2.25rem;
+    font-weight: 800;
+    display: block;
+}
+
+.countdown-item .label {
+    color: var(--hilal-dark-muted);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.countdown-separator {
+    width: 1px;
+    background: rgba(212, 168, 67, 0.2);
+}
+
+.countdown-title {
+    color: var(--hilal-gold);
+    font-size: 0.8125rem;
+    margin-top: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: var(--hilal-spacing-xs) var(--hilal-spacing-md);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    margin-top: var(--hilal-spacing-md);
+}
+
+.status-badge.confirmed {
+    background: var(--hilal-success);
+}
+
+.status-badge.estimated {
+    background: var(--hilal-warning);
+}
+
+/* ========================================
+   Cards - White with subtle borders
+   ======================================== */
+.card {
+    background: var(--hilal-white);
+    border-radius: 14px;
+    border: 1px solid var(--hilal-border);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hilal-shadow);
+}
+
+.card-header {
+    padding: var(--hilal-spacing-md) var(--hilal-spacing-lg);
+    background: var(--hilal-white);
+    border-bottom: 1px solid var(--hilal-border);
+}
+
+.card-body {
+    padding: var(--hilal-spacing-lg);
+}
+
+.card-footer {
+    padding: var(--hilal-spacing-md) var(--hilal-spacing-lg);
+    background: var(--hilal-gray-100);
+    border-top: 1px solid var(--hilal-border);
+}
+
+.card-title {
+    color: var(--hilal-gold);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--hilal-spacing-md);
+}
+
+/* Quick Action Cards - Colored backgrounds */
+.quick-actions {
+    display: flex;
+    gap: var(--hilal-spacing-md);
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+}
+
+.quick-action-card {
+    flex: 1;
+    min-width: 200px;
+    padding: 22px 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.quick-action-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--hilal-shadow);
+}
+
+.quick-action-card .icon {
+    font-size: 1.75rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.quick-action-card .label {
+    font-weight: 700;
+    font-size: 0.9375rem;
+    color: var(--hilal-text);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.quick-action-card .description {
+    font-size: 0.75rem;
+    color: var(--hilal-muted);
+    line-height: 1.5;
+}
+
+/* Quick action card variants */
+.quick-action-card.calendar {
+    background: #E8F4FD;
+    border: 1px solid #B8D8ED;
+}
+
+.quick-action-card.announcements {
+    background: var(--hilal-gold-bg);
+    border: 1px solid var(--hilal-gold-border);
+}
+
+.quick-action-card.report {
+    background: #E8FDF0;
+    border: 1px solid #A8DFC0;
+}
+
+.quick-action-card.regional {
+    background: #F3E8FD;
+    border: 1px solid #D0B8ED;
+}
+
+/* ========================================
+   Announcement Banner - Gold light theme
+   ======================================== */
+.announcement-banner {
+    background: var(--hilal-gold-bg);
+    border-bottom: 1px solid var(--hilal-gold-border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.announcement-banner .badge-new {
+    background: var(--hilal-gold-light);
+    color: var(--hilal-white);
+    font-size: 0.625rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.announcement-banner .content {
+    flex: 1;
+}
+
+.announcement-banner .title {
+    color: var(--hilal-text);
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: inline;
+}
+
+.announcement-banner .excerpt {
+    color: var(--hilal-muted);
+    font-size: 0.8125rem;
+    display: inline;
+}
+
+.announcement-banner .title-ar {
+    color: var(--hilal-muted);
+    font-size: 0.75rem;
+    font-family: var(--hilal-font-arabic);
+}
+
+.announcement-banner.high {
+    background: rgba(212, 85, 85, 0.1);
+    border-color: rgba(212, 85, 85, 0.3);
+}
+
+.announcement-banner.high .badge-new {
+    background: var(--hilal-danger);
+}
+
+/* ========================================
+   Calendar Grid - Matching wireframe
+   ======================================== */
+.calendar-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--hilal-spacing-md);
+    justify-content: center;
+}
+
+.month-card {
+    width: calc(33.33% - 12px);
+    min-width: 240px;
+    background: var(--hilal-white);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid var(--hilal-border);
+    box-sizing: border-box;
+    position: relative;
+}
+
+.month-card.current {
+    background: var(--hilal-gold-bg);
+    border-color: var(--hilal-gold-border);
+}
+
+.month-card .current-badge {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: var(--hilal-gold-light);
+    color: var(--hilal-white);
+    font-size: 0.5625rem;
+    font-weight: 800;
+    padding: 2px 10px;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.month-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.month-number {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--hilal-gray-100);
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 0.9375rem;
+    color: var(--hilal-muted);
+    flex-shrink: 0;
+}
+
+.month-card.current .month-number {
+    background: var(--hilal-gold-light);
+    color: var(--hilal-white);
+}
+
+.month-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--hilal-text);
+    margin: 0;
+}
+
+.month-name-ar {
+    font-family: var(--hilal-font-arabic);
+    font-size: 0.9375rem;
+    color: var(--hilal-muted);
+    margin: 0;
+}
+
+.month-details {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid var(--hilal-border);
+}
+
+.month-card.current .month-details {
+    border-top-color: var(--hilal-gold-border);
+}
+
+.month-detail-label {
+    color: var(--hilal-muted);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.month-detail-value {
+    color: var(--hilal-text);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.month-dates {
+    color: var(--hilal-muted);
+    font-size: 0.875rem;
+    margin-bottom: var(--hilal-spacing-sm);
+}
+
+.month-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.month-status.confirmed {
+    color: var(--hilal-success);
+}
+
+.month-status.estimated {
+    color: var(--hilal-muted);
+}
+
+.month-status.pending_sighting {
+    color: var(--hilal-warning);
+}
+
+.month-events {
+    margin-top: var(--hilal-spacing-md);
+    padding-top: var(--hilal-spacing-md);
+    border-top: 1px solid var(--hilal-border);
+}
+
+.event-tag {
+    display: inline-block;
+    padding: var(--hilal-spacing-xs) var(--hilal-spacing-sm);
+    background: var(--hilal-gray-100);
+    border-radius: var(--hilal-border-radius);
+    font-size: 0.75rem;
+    margin: var(--hilal-spacing-xs);
+}
+
+.event-tag.eid,
+.event-tag.religious {
+    background: var(--hilal-gold-bg);
+    color: var(--hilal-gold-light);
+}
+
+.event-tag.fasting {
+    background: rgba(72, 176, 122, 0.1);
+    color: var(--hilal-success);
+}
+
+/* ========================================
+   Prayer Times - Matching wireframe
+   ======================================== */
+.prayer-times-card {
+    background: var(--hilal-white);
+    border-radius: 14px;
+    border: 1px solid var(--hilal-border);
+    overflow: hidden;
+}
+
+.prayer-list {
+    display: grid;
+    gap: 0;
+}
+
+.prayer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--hilal-spacing-md) var(--hilal-spacing-lg);
+    border-bottom: 1px solid var(--hilal-border);
+    transition: all 0.2s ease;
+}
+
+.prayer-item:last-child {
+    border-bottom: none;
+}
+
+.prayer-item.next {
+    background: var(--hilal-gold-bg);
+    border-left: 3px solid var(--hilal-gold);
+}
+
+.prayer-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--hilal-text);
+}
+
+.prayer-item.next .prayer-name {
+    color: var(--hilal-gold-light);
+}
+
+.prayer-time {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--hilal-text);
+}
+
+.prayer-item.next .prayer-time {
+    color: var(--hilal-gold);
+}
+
+.prayer-countdown {
+    font-size: 0.75rem;
+    color: var(--hilal-muted);
+    margin-top: 4px;
+}
+
+/* Next prayer info section */
+#next-prayer-info {
+    background: var(--hilal-gray-100);
+    padding: var(--hilal-spacing-lg);
+    text-align: center;
+}
+
+#next-prayer-name {
+    color: var(--hilal-gold);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+#next-prayer-countdown {
+    color: var(--hilal-muted);
+    font-size: 0.875rem;
+}
+
+/* ========================================
+   Qibla Compass - Updated styling
+   ======================================== */
+.qibla-container {
+    text-align: center;
+    padding: var(--hilal-spacing-xl);
+}
+
+.compass-wrapper {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto var(--hilal-spacing-lg);
+    position: relative;
+}
+
+.compass {
+    width: 100%;
+    height: 100%;
+    border: 4px solid var(--hilal-gold);
+    border-radius: 50%;
+    position: relative;
+    background: linear-gradient(to bottom, #f8f9fa, var(--hilal-white));
+}
+
+.compass-directions {
+    font-weight: 700;
+    color: var(--hilal-muted);
+    font-size: 0.875rem;
+}
+
+.compass-needle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 45%;
+    background: linear-gradient(to top, var(--hilal-danger), var(--hilal-danger) 50%, var(--hilal-gray-300) 50%);
+    transform-origin: bottom center;
+    border-radius: 3px;
+    margin-left: -3px;
+    margin-top: -45%;
+    transition: transform 0.5s ease;
+}
+
+.compass-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: var(--hilal-gold);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.qibla-direction {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--hilal-gold);
+}
+
+.qibla-distance {
+    color: var(--hilal-muted);
+    margin-top: var(--hilal-spacing-sm);
+    font-size: 0.875rem;
+}
+
+/* ========================================
+   Announcement List - Matching wireframe
+   ======================================== */
+.announcements-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.announcement-item {
+    background: var(--hilal-white);
+    border-radius: 14px;
+    padding: 22px 24px;
+    border: 1px solid var(--hilal-border);
+    margin-bottom: 14px;
+}
+
+.announcement-item .meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.announcement-item .priority-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.announcement-item .priority-dot.high {
+    background: var(--hilal-danger);
+}
+
+.announcement-item .priority-dot.medium {
+    background: var(--hilal-warning);
+}
+
+.announcement-item .priority-dot.low {
+    background: var(--hilal-success);
+}
+
+.announcement-item .type-badge {
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.625rem;
+    background: var(--hilal-gold-bg);
+    color: var(--hilal-gold);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.announcement-item .date {
+    color: var(--hilal-muted);
+    font-size: 0.75rem;
+    margin-left: auto;
+}
+
+.announcement-item h3 {
+    color: var(--hilal-text);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0 0 2px;
+}
+
+.announcement-item .title-ar {
+    color: var(--hilal-muted);
+    font-size: 1rem;
+    font-family: var(--hilal-font-arabic);
+    margin-bottom: 10px;
+}
+
+.announcement-item .body {
+    color: var(--hilal-muted);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    margin-bottom: 14px;
+}
+
+.announcement-item .actions {
+    display: flex;
+    gap: 12px;
+}
+
+.announcement-item .actions button {
+    background: var(--hilal-gray-100);
+    color: var(--hilal-muted);
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.6875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.announcement-item .actions button:hover {
+    background: var(--hilal-border);
+}
+
+/* Upcoming months list */
+.upcoming-months-list {
+    background: var(--hilal-white);
+    border-radius: 14px;
+    padding: 24px;
+    border: 1px solid var(--hilal-border);
+}
+
+.upcoming-months-list .list-title {
+    color: var(--hilal-gold);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+}
+
+.month-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--hilal-border);
+}
+
+.month-list-item:last-child {
+    border-bottom: none;
+}
+
+.month-list-item .month-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.month-list-item .month-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--hilal-gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--hilal-muted);
+    font-size: 0.6875rem;
+    font-weight: 700;
+}
+
+.month-list-item.current .month-num {
+    background: var(--hilal-gold-bg);
+    color: var(--hilal-gold);
+}
+
+.month-list-item .month-names .en {
+    color: var(--hilal-text);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.month-list-item .month-names .ar {
+    color: var(--hilal-muted);
+    font-size: 0.8125rem;
+    font-family: var(--hilal-font-arabic);
+}
+
+.month-list-item .month-date {
+    text-align: right;
+}
+
+.month-list-item .month-date .date {
+    color: var(--hilal-text);
+    font-size: 0.8125rem;
+}
+
+.month-list-item .month-date .status {
+    font-size: 0.625rem;
+    margin-top: 2px;
+}
+
+.month-list-item .month-date .status.confirmed {
+    color: var(--hilal-success);
+}
+
+.month-list-item .month-date .status.calculated {
+    color: var(--hilal-muted);
+}
+
+/* ========================================
+   Forms - Clean modern style
+   ======================================== */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 0.6875rem;
+    color: var(--hilal-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    border: 1px solid var(--hilal-border);
+    border-radius: 10px;
+    background: var(--hilal-white);
+    color: var(--hilal-text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--hilal-gold);
+    box-shadow: 0 0 0 3px var(--hilal-gold-dim);
+}
+
+.form-control::placeholder {
+    color: var(--hilal-muted);
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236B7A90' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* File upload area */
+.file-upload-area {
+    background: var(--hilal-bg);
+    border: 2px dashed var(--hilal-border);
+    border-radius: 14px;
+    padding: 32px 0;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.file-upload-area:hover {
+    border-color: var(--hilal-gold);
+    background: var(--hilal-gold-bg);
+}
+
+.file-upload-area .icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.file-upload-area .text {
+    color: var(--hilal-muted);
+    font-size: 0.8125rem;
+}
+
+.file-upload-area .hint {
+    color: var(--hilal-muted);
+    font-size: 0.6875rem;
+    margin-top: 4px;
+}
+
+/* Checkbox styling */
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-checkbox input {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid var(--hilal-gold);
+    background: var(--hilal-gold-bg);
+    appearance: none;
+    cursor: pointer;
+}
+
+.form-checkbox input:checked {
+    background: var(--hilal-gold);
+}
+
+.form-checkbox label {
+    color: var(--hilal-muted);
+    font-size: 0.75rem;
+}
+
+/* ========================================
+   Subscribe Section - Dark themed
+   ======================================== */
+.subscribe-section {
+    background: linear-gradient(135deg, #1C2537, var(--hilal-dark-card));
+    border-radius: 16px;
+    padding: 36px 32px;
+    text-align: center;
+    margin-top: 36px;
+}
+
+.subscribe-section .icon {
+    font-size: 1.75rem;
+    margin-bottom: 8px;
+}
+
+.subscribe-section h3 {
+    color: var(--hilal-white);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+
+.subscribe-section p {
+    color: var(--hilal-dark-muted);
+    font-size: 0.8125rem;
+    margin: 0 0 20px;
+}
+
+.subscribe-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.subscribe-form input {
+    width: 300px;
+    max-width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: var(--hilal-white);
+    font-size: 0.8125rem;
+}
+
+.subscribe-form input::placeholder {
+    color: var(--hilal-dark-muted);
+}
+
+.subscribe-form input:focus {
+    outline: none;
+    border-color: var(--hilal-gold);
+}
+
+.subscribe-form button {
+    background: var(--hilal-gold);
+    color: var(--hilal-dark-bg);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.subscribe-form button:hover {
+    background: var(--hilal-gold-light);
+}
+
+.subscribe-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.subscribe-buttons button {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--hilal-white);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.subscribe-buttons button:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================
+   Buttons - Gold accent theme
+   ======================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--hilal-spacing-sm);
+    padding: 12px 24px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--hilal-gold);
+    color: var(--hilal-white);
+}
+
+.btn-primary:hover {
+    background: var(--hilal-gold-light);
+    color: var(--hilal-white);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: var(--hilal-gray-100);
+    color: var(--hilal-muted);
+    border: 1px solid var(--hilal-border);
+}
+
+.btn-secondary:hover {
+    background: var(--hilal-border);
+    color: var(--hilal-text);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--hilal-border);
+    color: var(--hilal-muted);
+}
+
+.btn-outline:hover {
+    border-color: var(--hilal-gold);
+    color: var(--hilal-gold);
+}
+
+.btn-outline-gold {
+    background: var(--hilal-gold-bg);
+    border: 1px solid var(--hilal-gold-border);
+    color: var(--hilal-gold);
+}
+
+.btn-outline-gold:hover {
+    background: var(--hilal-gold);
+    color: var(--hilal-white);
+}
+
+.btn-lg {
+    padding: 14px 32px;
+    font-size: 1rem;
+    border-radius: 12px;
+}
+
+.btn-sm {
+    padding: 6px 14px;
+    font-size: 0.6875rem;
+}
+
+.btn-icon {
+    padding: 8px 14px;
+}
+
+/* Filter buttons */
+.filter-btn {
+    background: transparent;
+    border: 1px solid var(--hilal-border);
+    color: var(--hilal-muted);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--hilal-gold);
+    border-color: var(--hilal-gold);
+    color: var(--hilal-white);
+}
+
+/* ========================================
+   Footer - Light theme matching wireframe
+   ======================================== */
+.site-footer {
+    background: #f0f0ec;
+    border-top: 1px solid var(--hilal-border);
+    padding: 24px 32px;
+}
+
+.footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-brand .icon {
+    font-size: 1rem;
+}
+
+.footer-brand .name {
+    color: var(--hilal-gold-light);
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.footer-brand .tagline {
+    color: var(--hilal-muted);
+    font-size: 0.6875rem;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-nav a {
+    color: var(--hilal-muted);
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-nav a:hover {
+    color: var(--hilal-gold);
+}
+
+.footer-copyright {
+    color: var(--hilal-muted);
+    font-size: 0.6875rem;
+}
+
+/* For expanded footer */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--hilal-spacing-xl);
+    margin-bottom: var(--hilal-spacing-xl);
+    padding: var(--hilal-spacing-xl) 0;
+}
+
+.footer-section h4 {
+    color: var(--hilal-gold);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--hilal-spacing-md);
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section li {
+    margin-bottom: var(--hilal-spacing-sm);
+}
+
+.footer-section a {
+    color: var(--hilal-muted);
+    font-size: 0.8125rem;
+}
+
+.footer-section a:hover {
+    color: var(--hilal-gold);
+}
+
+/* ========================================
+   Utilities
+   ======================================== */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+.text-muted { color: var(--hilal-muted); }
+.text-gold { color: var(--hilal-gold); }
+.text-success { color: var(--hilal-success); }
+.text-warning { color: var(--hilal-warning); }
+.text-danger { color: var(--hilal-danger); }
+
+.mt-1 { margin-top: var(--hilal-spacing-md); }
+.mt-2 { margin-top: var(--hilal-spacing-xl); }
+.mt-3 { margin-top: var(--hilal-spacing-2xl); }
+.mb-1 { margin-bottom: var(--hilal-spacing-md); }
+.mb-2 { margin-bottom: var(--hilal-spacing-xl); }
+.mb-3 { margin-bottom: var(--hilal-spacing-2xl); }
+
+.hidden { display: none; }
+.flex { display: flex; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-1 { gap: var(--hilal-spacing-md); }
+.gap-2 { gap: var(--hilal-spacing-xl); }
+
+.w-full { width: 100%; }
+.max-w-sm { max-width: 400px; }
+.max-w-md { max-width: 500px; }
+.max-w-lg { max-width: 800px; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+/* Page header */
+.page-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.page-header h1 {
+    color: var(--hilal-text);
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0 0 6px;
+}
+
+.page-header .subtitle {
+    color: var(--hilal-muted);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.page-header .subtitle-ar {
+    font-family: var(--hilal-font-arabic);
+}
+
+/* Two column layout */
+.two-columns {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.two-columns > * {
+    flex: 1;
+    min-width: 300px;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 992px) {
+    .calendar-grid {
+        justify-content: center;
+    }
+
+    .month-card {
+        width: calc(50% - 8px);
+    }
+}
+
+@media (max-width: 768px) {
+    .hijri-day {
+        font-size: 2.5rem;
+    }
+
+    .hijri-month {
+        font-size: 1.25rem;
+    }
+
+    .countdown-wrapper {
+        padding: 14px 20px;
+        gap: 16px;
+    }
+
+    .countdown-item .value {
+        font-size: 1.75rem;
+    }
+
+    .month-card {
+        width: 100%;
+    }
+
+    .quick-actions {
+        flex-direction: column;
+    }
+
+    .quick-action-card {
+        min-width: 100%;
+    }
+
+    .two-columns {
+        flex-direction: column;
+    }
+
+    .two-columns > * {
+        min-width: 100%;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .subscribe-form {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .subscribe-form input {
+        width: 100%;
+    }
+
+    .subscribe-buttons {
+        flex-direction: column;
+    }
+
+    .announcement-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px;
+    }
+
+    .announcement-item .date {
+        margin-left: 0;
+        width: 100%;
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    .section {
+        padding: var(--hilal-spacing-xl) 0;
+    }
+
+    .hijri-date-hero {
+        padding: 40px 16px;
+    }
+
+    .countdown-wrapper {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px 24px;
+    }
+
+    .countdown-separator {
+        width: 100%;
+        height: 1px;
+    }
+}

@@ -1,0 +1,267 @@
+/**
+ * RTL (Right-to-Left) Stylesheet for Arabic
+ *
+ * @package Hilal
+ */
+
+/* ========================================
+   RTL Base Overrides
+   ======================================== */
+body.rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+/* ========================================
+   Header RTL
+   ======================================== */
+.rtl .header-inner {
+    flex-direction: row-reverse;
+}
+
+.rtl .site-branding {
+    flex-direction: row-reverse;
+}
+
+.rtl .nav-menu {
+    flex-direction: row-reverse;
+}
+
+.rtl .language-switcher {
+    flex-direction: row-reverse;
+}
+
+/* ========================================
+   Navigation RTL
+   ======================================== */
+.rtl .main-navigation {
+    flex-direction: row-reverse;
+}
+
+@media (max-width: 768px) {
+    .rtl .main-navigation {
+        flex-direction: column;
+    }
+}
+
+/* ========================================
+   Typography RTL
+   ======================================== */
+.rtl .text-ar {
+    direction: rtl;
+}
+
+.rtl .text-en {
+    direction: ltr;
+}
+
+/* ========================================
+   Forms RTL
+   ======================================== */
+.rtl .form-control {
+    text-align: right;
+}
+
+.rtl .form-select {
+    background-position: left var(--hilal-spacing-md) center;
+    padding-left: calc(var(--hilal-spacing-md) * 2 + 12px);
+    padding-right: var(--hilal-spacing-md);
+}
+
+.rtl input[type="email"],
+.rtl input[type="text"],
+.rtl input[type="number"],
+.rtl input[type="tel"] {
+    text-align: right;
+}
+
+.rtl textarea {
+    text-align: right;
+}
+
+/* ========================================
+   Cards RTL
+   ======================================== */
+.rtl .card {
+    text-align: right;
+}
+
+.rtl .month-card-header {
+    flex-direction: row-reverse;
+}
+
+.rtl .quick-action-card {
+    text-align: center;
+}
+
+/* ========================================
+   Buttons RTL
+   ======================================== */
+.rtl .btn {
+    flex-direction: row-reverse;
+}
+
+/* ========================================
+   Announcement RTL
+   ======================================== */
+.rtl .announcement-banner {
+    text-align: right;
+}
+
+/* ========================================
+   Prayer Times RTL
+   ======================================== */
+.rtl .prayer-item {
+    flex-direction: row-reverse;
+}
+
+.rtl .prayer-name {
+    text-align: right;
+}
+
+.rtl .prayer-time {
+    text-align: left;
+}
+
+/* ========================================
+   Qibla RTL
+   ======================================== */
+.rtl .qibla-container {
+    text-align: center;
+}
+
+/* ========================================
+   Footer RTL
+   ======================================== */
+.rtl .footer-section {
+    text-align: right;
+}
+
+.rtl .footer-section ul {
+    padding-right: 0;
+}
+
+.rtl .footer-bottom {
+    text-align: center;
+}
+
+/* ========================================
+   Status Badges RTL
+   ======================================== */
+.rtl .status-badge,
+.rtl .type-badge,
+.rtl .priority-badge,
+.rtl .event-tag {
+    direction: rtl;
+}
+
+/* ========================================
+   Share Buttons RTL
+   ======================================== */
+.rtl .share-buttons {
+    flex-direction: row-reverse;
+}
+
+/* ========================================
+   Lists RTL
+   ======================================== */
+.rtl ul,
+.rtl ol {
+    padding-right: 1.5rem;
+    padding-left: 0;
+}
+
+/* ========================================
+   Calendar Grid RTL
+   ======================================== */
+.rtl .calendar-grid {
+    direction: rtl;
+}
+
+/* ========================================
+   Subscribe Form RTL
+   ======================================== */
+.rtl .subscribe-form {
+    flex-direction: row-reverse;
+}
+
+/* ========================================
+   Sighting Report Form RTL
+   ======================================== */
+.rtl .sighting-form .form-group {
+    text-align: right;
+}
+
+.rtl .sighting-form .form-label {
+    text-align: right;
+}
+
+/* ========================================
+   Notifications RTL
+   ======================================== */
+.rtl .notification {
+    right: auto;
+    left: 20px;
+}
+
+/* ========================================
+   Tables RTL
+   ======================================== */
+.rtl table {
+    direction: rtl;
+}
+
+.rtl th,
+.rtl td {
+    text-align: right;
+}
+
+/* ========================================
+   Spacing Adjustments RTL
+   ======================================== */
+.rtl .ml-auto {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.rtl .mr-auto {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+/* ========================================
+   Icons RTL
+   ======================================== */
+.rtl .dashicons-arrow-right:before {
+    content: "\f341"; /* Arrow left */
+}
+
+.rtl .dashicons-arrow-left:before {
+    content: "\f345"; /* Arrow right */
+}
+
+/* ========================================
+   Compass RTL
+   ======================================== */
+.rtl .compass {
+    /* Compass direction is absolute, no RTL flip needed */
+}
+
+/* ========================================
+   Pagination RTL
+   ======================================== */
+.rtl .pagination {
+    flex-direction: row-reverse;
+}
+
+.rtl .page-numbers {
+    direction: ltr; /* Keep numbers LTR */
+}
+
+/* ========================================
+   Accessibility RTL
+   ======================================== */
+.rtl .screen-reader-text {
+    right: -9999px;
+    left: auto;
+}

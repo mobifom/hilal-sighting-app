@@ -1,0 +1,19 @@
+{
+  "name": "hilal-sighting-apps",
+  "version": "1.0.0",
+  "description": "Hilal - Islamic Moon Sighting Platform for New Zealand",
+  "scripts": {
+    "wp-env": "wp-env",
+    "start": "wp-env start",
+    "stop": "wp-env stop",
+    "destroy": "wp-env destroy",
+    "cli": "wp-env run cli",
+    "logs": "wp-env logs"
+  },
+  "keywords": ["wordpress", "islamic", "hijri", "moon-sighting", "calendar"],
+  "author": "Mohamed",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/env": "^9.0.0"
+  }
+}

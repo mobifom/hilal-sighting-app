@@ -1,0 +1,26 @@
+{
+  "core": "WordPress/WordPress#6.4",
+  "phpVersion": "8.2",
+  "plugins": [
+    "./hilal-plugin",
+    "https://downloads.wordpress.org/plugin/advanced-custom-fields.6.2.4.zip",
+    "https://downloads.wordpress.org/plugin/jwt-authentication-for-wp-rest-api.1.3.4.zip",
+    "https://downloads.wordpress.org/plugin/wp-mail-smtp.4.0.1.zip"
+  ],
+  "themes": [
+    "./hilal-theme"
+  ],
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "WP_DEBUG_DISPLAY": false,
+    "SCRIPT_DEBUG": true,
+    "JWT_AUTH_SECRET_KEY": "hilal-dev-secret-key-change-in-production",
+    "JWT_AUTH_CORS_ENABLE": true
+  },
+  "mappings": {
+    "wp-content/uploads": "./uploads"
+  },
+  "port": 8888,
+  "testsPort": 8889
+}
