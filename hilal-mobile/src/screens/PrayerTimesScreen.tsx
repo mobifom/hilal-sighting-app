@@ -3,7 +3,7 @@
  * Displays prayer times for selected mosque or current location
  */
 
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import {
   TextInput,
   Modal,
   FlatList,
+  Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -52,16 +53,85 @@ export default function PrayerTimesScreen() {
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimes | null>(null);
   const [iqamaTimes, setIqamaTimes] = useState<IqamaTimes | null>(null);
   const [nextPrayer, setNextPrayer] = useState<{ name: string; time: string; minutes_until: number } | null>(null);
+  const [countdown, setCountdown] = useState<{ hours: number; minutes: number; seconds: number } | null>(null);
   const [source, setSource] = useState<'my-masjid' | 'calculation' | 'location'>('calculation');
   const [showMosquePicker, setShowMosquePicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [useLocation, setUseLocation] = useState(false);
+
+  const countdownRef = useRef<NodeJS.Timeout | null>(null);
+  const pulseAnim = useRef(new Animated.Value(1)).current;
 
   // Set default mosque (Masjid e Umar - popular Auckland mosque)
   useEffect(() => {
     const defaultMosque = NZ_MOSQUES.find(m => m.id === 'masjid-e-umar') || NZ_MOSQUES[0];
     setSelectedMosque(defaultMosque);
   }, []);
+
+  // Live countdown timer
+  useEffect(() => {
+    if (nextPrayer?.time && prayerTimes) {
+      // Clear existing interval
+      if (countdownRef.current) {
+        clearInterval(countdownRef.current);
+      }
+
+      const updateCountdown = () => {
+        const now = new Date();
+        const [hours, minutes] = nextPrayer.time.split(':').map(Number);
+        const prayerTime = new Date();
+        prayerTime.setHours(hours, minutes, 0, 0);
+
+        // If prayer time has passed, it might be for tomorrow
+        if (prayerTime <= now) {
+          prayerTime.setDate(prayerTime.getDate() + 1);
+        }
+
+        const diff = prayerTime.getTime() - now.getTime();
+        if (diff > 0) {
+          const totalSeconds = Math.floor(diff / 1000);
+          const hrs = Math.floor(totalSeconds / 3600);
+          const mins = Math.floor((totalSeconds % 3600) / 60);
+          const secs = totalSeconds % 60;
+          setCountdown({ hours: hrs, minutes: mins, seconds: secs });
+        } else {
+          setCountdown(null);
+        }
+      };
+
+      // Update immediately and then every second
+      updateCountdown();
+      countdownRef.current = setInterval(updateCountdown, 1000);
+
+      return () => {
+        if (countdownRef.current) {
+          clearInterval(countdownRef.current);
+        }
+      };
+    }
+  }, [nextPrayer, prayerTimes]);
+
+  // Pulse animation for countdown when under 5 minutes
+  useEffect(() => {
+    if (countdown && countdown.hours === 0 && countdown.minutes < 5) {
+      const pulse = Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, {
+            toValue: 1.05,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseAnim, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+        ])
+      );
+      pulse.start();
+      return () => pulse.stop();
+    }
+  }, [countdown]);
 
   useEffect(() => {
     if (selectedMosque && !useLocation) {
@@ -139,14 +209,22 @@ export default function PrayerTimesScreen() {
     setRefreshing(false);
   }, [selectedMosque, useLocation]);
 
-  const formatMinutes = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
+  const formatCountdown = () => {
+    if (!countdown) return '';
+    const { hours, minutes, seconds } = countdown;
     if (language === 'ar') {
-      return `بعد ${hours > 0 ? hours + ' ساعة و ' : ''}${mins} دقيقة`;
+      if (hours > 0) {
+        return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     }
-    return `in ${hours > 0 ? hours + 'h ' : ''}${mins}m`;
+    if (hours > 0) {
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
+
+  const isCountdownUrgent = countdown && countdown.hours === 0 && countdown.minutes < 5;
 
   // Filter mosques based on search
   const filteredMosques = useMemo(() => {
@@ -330,17 +408,36 @@ export default function PrayerTimesScreen() {
           {/* Next Prayer Info */}
           {nextPrayer && (
             <View style={[styles.nextPrayerInfo, { backgroundColor: colors.background }]}>
-              <Text style={[styles.nextPrayerLabel, { color: colors.muted }]}>
-                {t('Next Prayer', 'الصلاة القادمة')}
-              </Text>
+              <View style={styles.nextPrayerHeader}>
+                <Ionicons name="time-outline" size={16} color={colors.muted} />
+                <Text style={[styles.nextPrayerLabel, { color: colors.muted }]}>
+                  {t('Next Prayer', 'الصلاة القادمة')}
+                </Text>
+              </View>
               <Text style={[styles.nextPrayerName, { color: Colors.dark.gold }]}>
                 {language === 'ar'
                   ? PrayerNames.ar[nextPrayer.name as keyof typeof PrayerNames.ar]
                   : PrayerNames.en[nextPrayer.name as keyof typeof PrayerNames.en]}
               </Text>
-              <Text style={[styles.nextPrayerCountdown, { color: colors.muted }]}>
-                {formatMinutes(nextPrayer.minutes_until)}
+              <Text style={[styles.nextPrayerTime, { color: colors.text }]}>
+                {nextPrayer.time}
               </Text>
+              {countdown && (
+                <Animated.View
+                  style={[
+                    styles.countdownContainer,
+                    isCountdownUrgent && styles.countdownUrgent,
+                    { transform: [{ scale: pulseAnim }] },
+                  ]}
+                >
+                  <Text style={[styles.countdownText, isCountdownUrgent && styles.countdownTextUrgent]}>
+                    {formatCountdown()}
+                  </Text>
+                  <Text style={[styles.countdownLabel, isCountdownUrgent && styles.countdownLabelUrgent]}>
+                    {t('remaining', 'متبقي')}
+                  </Text>
+                </Animated.View>
+              )}
             </View>
           )}
         </View>
@@ -622,17 +719,53 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
   },
+  nextPrayerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 8,
+  },
   nextPrayerLabel: {
     fontSize: 12,
-    marginBottom: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   nextPrayerName: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
   },
-  nextPrayerCountdown: {
-    fontSize: 14,
+  nextPrayerTime: {
+    fontSize: 16,
     marginTop: 4,
+  },
+  countdownContainer: {
+    marginTop: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: 'rgba(212, 175, 55, 0.1)',
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  countdownUrgent: {
+    backgroundColor: 'rgba(231, 76, 60, 0.15)',
+  },
+  countdownText: {
+    fontSize: 32,
+    fontWeight: '800',
+    fontVariant: ['tabular-nums'],
+    color: Colors.dark.gold,
+  },
+  countdownTextUrgent: {
+    color: Colors.status.danger,
+  },
+  countdownLabel: {
+    fontSize: 11,
+    marginTop: 2,
+    color: Colors.dark.gold,
+    textTransform: 'uppercase',
+  },
+  countdownLabelUrgent: {
+    color: Colors.status.danger,
   },
   mosqueInfo: {
     marginHorizontal: Spacing.base,
