@@ -667,6 +667,84 @@ class HilalAPIClient {
   async subscribe(email: string) {
     return this.post<{ success: boolean; message: string }>('subscribe', { email });
   }
+
+  // ========================================
+  // FAQ Endpoints
+  // ========================================
+
+  async getFAQs(options?: { category?: string; featured?: boolean; grouped?: boolean }) {
+    const params: Record<string, string> = {};
+    if (options?.category) params.category = options.category;
+    if (options?.featured) params.featured = 'true';
+    if (options?.grouped) params.grouped = 'true';
+
+    return this.get<Array<{
+      id: number;
+      slug: string;
+      question_en: string;
+      question_ar: string;
+      answer_en: string;
+      answer_ar: string;
+      category: string;
+      category_label: string;
+      category_label_ar: string;
+      display_order: number;
+      is_featured: boolean;
+    }> | Array<{
+      key: string;
+      label: string;
+      label_ar: string;
+      faqs: Array<{
+        id: number;
+        question_en: string;
+        question_ar: string;
+        answer_en: string;
+        answer_ar: string;
+        category: string;
+        is_featured: boolean;
+      }>;
+    }>>('faqs', params);
+  }
+
+  async getFAQ(id: number) {
+    return this.get<{
+      id: number;
+      slug: string;
+      question_en: string;
+      question_ar: string;
+      answer_en: string;
+      answer_ar: string;
+      category: string;
+      category_label: string;
+      category_label_ar: string;
+      display_order: number;
+      is_featured: boolean;
+    }>(`faqs/${id}`);
+  }
+
+  async searchFAQs(query: string, lang: 'en' | 'ar' = 'en') {
+    return this.get<{
+      query: string;
+      count: number;
+      results: Array<{
+        id: number;
+        question_en: string;
+        question_ar: string;
+        answer_en: string;
+        answer_ar: string;
+        category: string;
+        category_label: string;
+      }>;
+    }>('faqs/search', { q: query, lang });
+  }
+
+  async getFAQCategories() {
+    return this.get<Array<{
+      key: string;
+      label_en: string;
+      label_ar: string;
+    }>>('faqs/categories');
+  }
 }
 
 // Export singleton instance

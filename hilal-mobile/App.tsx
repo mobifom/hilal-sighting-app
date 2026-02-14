@@ -23,12 +23,14 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import PrayerTimesScreen from './src/screens/PrayerTimesScreen';
 import QiblaScreen from './src/screens/QiblaScreen';
 import AnnouncementDetailScreen from './src/screens/AnnouncementDetailScreen';
+import FAQScreen from './src/screens/FAQScreen';
 
 // Navigation types
 export type RootStackParamList = {
   Main: undefined;
   PrayerTimes: undefined;
   Qibla: undefined;
+  FAQ: undefined;
   AnnouncementDetail: { id: number };
 };
 
@@ -173,6 +175,16 @@ function Navigation() {
           options={{
             headerShown: true,
             headerTitle: '',
+            headerStyle: { backgroundColor: colors.card },
+            headerTintColor: colors.text,
+          }}
+        />
+        <Stack.Screen
+          name="FAQ"
+          component={FAQScreen}
+          options={{
+            headerShown: true,
+            headerTitle: 'FAQ',
             headerStyle: { backgroundColor: colors.card },
             headerTintColor: colors.text,
           }}

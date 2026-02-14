@@ -16,12 +16,16 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme, useLanguage } from '../context/AppContext';
 import { Colors, Spacing, BorderRadius } from '../utils/theme';
+import type { RootStackParamList } from '../../App';
 
 export default function SettingsScreen() {
   const { colors, theme, setTheme } = useTheme();
   const { t, language, setLanguage } = useLanguage();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const SettingRow = ({
     icon,
@@ -166,7 +170,12 @@ export default function SettingsScreen() {
           />
           <SettingRow
             icon="help-circle"
-            label={t('Help & Support', 'المساعدة والدعم')}
+            label={t('FAQ', 'الأسئلة الشائعة')}
+            onPress={() => navigation.navigate('FAQ')}
+          />
+          <SettingRow
+            icon="mail"
+            label={t('Contact Support', 'التواصل مع الدعم')}
             onPress={() => Linking.openURL('mailto:support@hilal.nz')}
           />
           <SettingRow

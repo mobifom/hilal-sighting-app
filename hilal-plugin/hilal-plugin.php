@@ -73,6 +73,7 @@ final class Hilal_Plugin {
         require_once HILAL_PLUGIN_DIR . 'includes/post-types/class-sighting-report.php';
         require_once HILAL_PLUGIN_DIR . 'includes/post-types/class-announcement.php';
         require_once HILAL_PLUGIN_DIR . 'includes/post-types/class-islamic-event.php';
+        require_once HILAL_PLUGIN_DIR . 'includes/post-types/class-faq.php';
 
         // API
         require_once HILAL_PLUGIN_DIR . 'includes/api/class-api-base.php';
@@ -81,6 +82,7 @@ final class Hilal_Plugin {
         require_once HILAL_PLUGIN_DIR . 'includes/api/class-sighting-api.php';
         require_once HILAL_PLUGIN_DIR . 'includes/api/class-prayer-times-api.php';
         require_once HILAL_PLUGIN_DIR . 'includes/api/class-qibla-api.php';
+        require_once HILAL_PLUGIN_DIR . 'includes/api/class-faq-api.php';
 
         // Admin
         require_once HILAL_PLUGIN_DIR . 'includes/admin/class-admin-dashboard.php';
@@ -175,6 +177,7 @@ final class Hilal_Plugin {
         Hilal_Sighting_Report::register();
         Hilal_Announcement::register();
         Hilal_Islamic_Event::register();
+        Hilal_FAQ::register();
     }
 
     /**
@@ -195,6 +198,9 @@ final class Hilal_Plugin {
 
         $qibla_api = new Hilal_Qibla_API();
         $qibla_api->register_routes();
+
+        $faq_api = new Hilal_FAQ_API();
+        $faq_api->register_routes();
     }
 
     /**
