@@ -61,7 +61,7 @@ class Hilal_FAQ {
             'show_ui'            => true,
             'show_in_menu'       => true,
             'query_var'          => true,
-            'rewrite'            => array( 'slug' => 'faq' ),
+            'rewrite'            => array( 'slug' => 'faqs' ),
             'capability_type'    => 'post',
             'has_archive'        => true,
             'hierarchical'       => false,
@@ -371,6 +371,11 @@ class Hilal_FAQ {
         $question_ar = get_field( 'question_ar', $post->ID );
         $answer_en   = get_field( 'answer_en', $post->ID ) ?: '';
         $answer_ar   = get_field( 'answer_ar', $post->ID );
+
+        // Fallback to post title if question is empty
+        if ( empty( $question_en ) ) {
+            $question_en = $post->post_title;
+        }
 
         // Fallback to English if Arabic is empty
         if ( empty( $question_ar ) ) {
