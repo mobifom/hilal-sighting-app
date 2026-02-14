@@ -95,7 +95,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
 
       if (storedUser) {
-        setUserState(JSON.parse(storedUser));
+        try {
+          setUserState(JSON.parse(storedUser));
+        } catch {
+          // Invalid stored user data, clear it
+          await AsyncStorage.removeItem(STORAGE_KEYS.USER);
+        }
       }
 
       // Fetch today's Hijri date

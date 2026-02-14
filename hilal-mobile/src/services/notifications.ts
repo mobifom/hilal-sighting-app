@@ -295,10 +295,15 @@ class NotificationService {
     try {
       const saved = await AsyncStorage.getItem(NOTIFICATION_SETTINGS_KEY);
       if (saved) {
-        this.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+        try {
+          this.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+        } catch {
+          // Invalid JSON, reset to defaults
+          await AsyncStorage.removeItem(NOTIFICATION_SETTINGS_KEY);
+        }
       }
     } catch (error) {
-      console.error('Error loading notification settings:', error);
+      // Error loading settings, use defaults
     }
     return this.settings;
   }

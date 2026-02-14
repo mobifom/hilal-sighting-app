@@ -142,7 +142,6 @@ export default function PrayerTimesScreen() {
   const loadPrayerTimes = async () => {
     if (!selectedMosque) return;
 
-    console.log('[PrayerTimes] Loading times for mosque:', selectedMosque.name);
     try {
       setLoading(true);
       const data = await api.getMosquePrayerTimes({
@@ -152,14 +151,12 @@ export default function PrayerTimesScreen() {
         myMasjidId: selectedMosque.myMasjidId,
       });
 
-      console.log('[PrayerTimes] Received data:', JSON.stringify(data));
       setPrayerTimes(data.times);
       setIqamaTimes(data.iqamaTimes || null);
       setNextPrayer(data.next_prayer);
       setSource(data.source);
       setUseLocation(false);
-    } catch (error) {
-      console.error('[PrayerTimes] Error loading prayer times:', error);
+    } catch {
       // Fallback to basic calculation if API fails
       loadLocationPrayerTimes(selectedMosque.lat, selectedMosque.lng);
     } finally {

@@ -123,8 +123,7 @@ export default function QiblaScreen() {
         // Start compass for live direction
         startCompass();
       }
-    } catch (error) {
-      console.error('Error finding Qibla:', error);
+    } catch {
       setDescription(t('Error finding Qibla direction', 'خطأ في تحديد اتجاه القبلة'));
     } finally {
       setLoading(false);

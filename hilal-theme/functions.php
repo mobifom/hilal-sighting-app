@@ -313,6 +313,11 @@ require_once HILAL_THEME_DIR . '/inc/template-functions.php';
 require_once HILAL_THEME_DIR . '/inc/customizer.php';
 
 /**
+ * Include SEO functions
+ */
+require_once HILAL_THEME_DIR . '/inc/seo.php';
+
+/**
  * Create required pages automatically
  */
 function hilal_create_required_pages() {
@@ -351,6 +356,11 @@ function hilal_create_required_pages() {
             'title'    => 'Qibla',
             'slug'     => 'qibla',
             'template' => 'page-qibla.php',
+        ),
+        array(
+            'title'    => 'FAQ',
+            'slug'     => 'faq',
+            'template' => 'page-faq.php',
         ),
     );
 

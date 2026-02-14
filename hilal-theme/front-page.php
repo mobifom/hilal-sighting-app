@@ -212,6 +212,7 @@ if ( $current_month < 9 ) {
             <h3>Never Miss a Moon Sighting</h3>
             <p>Subscribe to get instant push notifications for new month confirmations</p>
             <form class="subscribe-form" id="home-subscribe">
+                <?php wp_nonce_field( 'hilal_subscribe', 'hilal_subscribe_nonce' ); ?>
                 <input type="email" name="email" placeholder="Enter your email" required>
                 <button type="submit">Subscribe</button>
             </form>

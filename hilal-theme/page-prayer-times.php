@@ -12,9 +12,7 @@ $mosques = array();
 $regions = array();
 if ( class_exists( 'Hilal_Prayer_Times_API' ) ) {
     $api     = new Hilal_Prayer_Times_API();
-    $method  = new ReflectionMethod( 'Hilal_Prayer_Times_API', 'get_nz_mosques' );
-    $method->setAccessible( true );
-    $mosques = $method->invoke( $api );
+    $mosques = $api->get_nz_mosques();
 
     // Get unique regions
     $regions = array_unique( array_column( $mosques, 'region' ) );

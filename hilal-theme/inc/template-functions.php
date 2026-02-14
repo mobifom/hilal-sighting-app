@@ -13,7 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Fallback menu when no primary menu is set
  */
 function hilal_fallback_menu() {
-    $current_url = trailingslashit( home_url( add_query_arg( array(), $_SERVER['REQUEST_URI'] ) ) );
+    // Sanitize REQUEST_URI for security
+    $request_uri  = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+    $current_url  = trailingslashit( home_url( add_query_arg( array(), $request_uri ) ) );
     $current_path = wp_parse_url( $current_url, PHP_URL_PATH );
 
     $menu_items = array(
@@ -23,6 +25,7 @@ function hilal_fallback_menu() {
         '/prayer-times/'       => 'Prayer Times',
         '/qibla/'              => 'Qibla',
         '/crescent-sightings/' => 'Sightings',
+        '/faq/'                => 'FAQ',
     );
     ?>
     <ul class="nav-menu">

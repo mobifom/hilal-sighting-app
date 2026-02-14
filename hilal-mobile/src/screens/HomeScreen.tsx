@@ -66,14 +66,11 @@ export default function HomeScreen() {
 
   const loadData = async () => {
     try {
-      console.log('[HomeScreen] Loading data...');
       const [calendarData, announcementsData, latestData] = await Promise.all([
         api.getCalendar(),
         api.getAnnouncements({ per_page: 4 }),
         api.getLatestAnnouncement(),
       ]);
-
-      console.log('[HomeScreen] Calendar data:', JSON.stringify(calendarData?.months?.slice(7, 9)));
 
       // Get upcoming months (current + next 4)
       if (calendarData?.months) {
@@ -81,7 +78,6 @@ export default function HomeScreen() {
         const upcoming = calendarData.months
           .filter((m) => m.month_number >= currentMonth)
           .slice(0, 5);
-        console.log('[HomeScreen] Upcoming months:', JSON.stringify(upcoming.map(m => ({ name: m.month_name, status: m.status }))));
         setUpcomingMonths(upcoming);
       }
 

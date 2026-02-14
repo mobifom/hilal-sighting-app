@@ -40,7 +40,6 @@ class HilalAPIClient {
     this.wpBaseUrl = WP_BASE_URL;
     this.namespace = API_NAMESPACE;
     this.useRestRoute = useRestRoute;
-    console.log('[HilalAPI] Config:', { wpBaseUrl: this.wpBaseUrl, useRestRoute: this.useRestRoute });
   }
 
   // Build the correct API URL based on configuration
@@ -100,10 +99,17 @@ class HilalAPIClient {
     }
 
     try {
+      // Add timeout to prevent hanging requests
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const response = await fetch(urlString, {
         ...options,
         headers,
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       const json = await response.json();
 
@@ -115,6 +121,9 @@ class HilalAPIClient {
       return (json as ApiResponse<T>).data;
     } catch (error) {
       if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          throw new Error('Request timed out');
+        }
         throw error;
       }
       throw new Error('Network error');

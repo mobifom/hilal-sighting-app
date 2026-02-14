@@ -78,14 +78,20 @@ export default function FAQScreen() {
     try {
       setLoading(true);
       const data = await api.getFAQs({ grouped: true });
+
       if (Array.isArray(data) && data.length > 0 && 'faqs' in data[0]) {
+        // Grouped FAQs response
         setGroupedFaqs(data as FAQGroup[]);
-        // Flatten for filtering
         const allFaqs = (data as FAQGroup[]).flatMap(group => group.faqs);
         setFaqs(allFaqs);
+      } else if (Array.isArray(data) && data.length > 0) {
+        // Flat FAQs response
+        setFaqs(data as FAQ[]);
       }
-    } catch (error) {
-      console.error('[FAQScreen] Error loading FAQs:', error);
+    } catch {
+      // Error loading FAQs - will show empty state
+      setFaqs([]);
+      setGroupedFaqs([]);
     } finally {
       setLoading(false);
     }
@@ -105,8 +111,8 @@ export default function FAQScreen() {
       const result = await api.searchFAQs(searchQuery, language === 'ar' ? 'ar' : 'en');
       setFaqs(result.results as FAQ[]);
       setSelectedCategory('all');
-    } catch (error) {
-      console.error('[FAQScreen] Search error:', error);
+    } catch {
+      // Search error
     } finally {
       setSearching(false);
     }
@@ -157,6 +163,16 @@ export default function FAQScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.dark.gold} />
         }
       >
+        {/* Page Header */}
+        <View style={styles.pageHeader}>
+          <Text style={[styles.pageTitle, { color: colors.text }]}>
+            {t('Frequently Asked Questions', 'الأسئلة الشائعة')}
+          </Text>
+          <Text style={[styles.pageSubtitle, { color: colors.muted }]}>
+            {t('Find answers to common questions', 'ابحث عن إجابات للأسئلة الشائعة')}
+          </Text>
+        </View>
+
         {/* Search Box */}
         <View style={styles.searchContainer}>
           <View style={[styles.searchBox, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -321,6 +337,20 @@ export default function FAQScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  pageHeader: {
+    paddingHorizontal: Spacing.base,
+    paddingTop: Spacing.base,
+    paddingBottom: 8,
+  },
+  pageTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  pageSubtitle: {
+    fontSize: 14,
+    lineHeight: 20,
   },
   searchContainer: {
     flexDirection: 'row',

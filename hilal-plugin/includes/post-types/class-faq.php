@@ -130,18 +130,19 @@ class Hilal_FAQ {
                     'label'         => __( 'Question (Arabic)', 'hilal' ),
                     'name'          => 'question_ar',
                     'type'          => 'text',
-                    'required'      => 1,
-                    'instructions'  => __( 'Enter the question in Arabic', 'hilal' ),
+                    'required'      => 0,
+                    'instructions'  => __( 'Enter the question in Arabic (optional, will use English if empty)', 'hilal' ),
                 ),
                 array(
                     'key'           => 'field_faq_answer_ar',
                     'label'         => __( 'Answer (Arabic)', 'hilal' ),
                     'name'          => 'answer_ar',
                     'type'          => 'wysiwyg',
-                    'required'      => 1,
+                    'required'      => 0,
                     'tabs'          => 'all',
                     'toolbar'       => 'full',
                     'media_upload'  => 1,
+                    'instructions'  => __( 'Enter the answer in Arabic (optional, will use English if empty)', 'hilal' ),
                 ),
 
                 // Settings Tab
@@ -365,15 +366,27 @@ class Hilal_FAQ {
      * @return array
      */
     public static function format_faq_data( $post ) {
-        $category = get_field( 'category', $post->ID ) ?: 'general';
+        $category    = get_field( 'category', $post->ID ) ?: 'general';
+        $question_en = get_field( 'question_en', $post->ID ) ?: '';
+        $question_ar = get_field( 'question_ar', $post->ID );
+        $answer_en   = get_field( 'answer_en', $post->ID ) ?: '';
+        $answer_ar   = get_field( 'answer_ar', $post->ID );
+
+        // Fallback to English if Arabic is empty
+        if ( empty( $question_ar ) ) {
+            $question_ar = $question_en;
+        }
+        if ( empty( $answer_ar ) ) {
+            $answer_ar = $answer_en;
+        }
 
         return array(
             'id'            => $post->ID,
             'slug'          => $post->post_name,
-            'question_en'   => get_field( 'question_en', $post->ID ),
-            'question_ar'   => get_field( 'question_ar', $post->ID ),
-            'answer_en'     => get_field( 'answer_en', $post->ID ),
-            'answer_ar'     => get_field( 'answer_ar', $post->ID ),
+            'question_en'   => $question_en,
+            'question_ar'   => $question_ar,
+            'answer_en'     => $answer_en,
+            'answer_ar'     => $answer_ar,
             'category'      => $category,
             'category_label' => self::$categories[ $category ] ?? $category,
             'category_label_ar' => self::get_category_label_ar( $category ),

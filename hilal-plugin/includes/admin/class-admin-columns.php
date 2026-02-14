@@ -196,15 +196,24 @@ class Hilal_Admin_Columns {
      * Handle approve report action
      */
     public function handle_approve_report() {
-        $post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : 0;
+        $post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
 
-        if ( ! $post_id || ! wp_verify_nonce( $_GET['_wpnonce'], 'hilal_approve_report_' . $post_id ) ) {
-            wp_die( __( 'Invalid request.', 'hilal' ) );
+        // Security checks: nonce verification and capability check
+        if ( ! $post_id ) {
+            wp_die( __( 'Invalid post ID.', 'hilal' ) );
+        }
+
+        if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'hilal_approve_report_' . $post_id ) ) {
+            wp_die( __( 'Security check failed.', 'hilal' ) );
+        }
+
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            wp_die( __( 'You do not have permission to perform this action.', 'hilal' ) );
         }
 
         Hilal_Sighting_Report::update_status( $post_id, 'approved', '', get_current_user_id() );
 
-        wp_redirect( admin_url( 'edit.php?post_type=sighting_report&approved=1' ) );
+        wp_safe_redirect( admin_url( 'edit.php?post_type=sighting_report&approved=1' ) );
         exit;
     }
 
@@ -212,15 +221,24 @@ class Hilal_Admin_Columns {
      * Handle reject report action
      */
     public function handle_reject_report() {
-        $post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : 0;
+        $post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
 
-        if ( ! $post_id || ! wp_verify_nonce( $_GET['_wpnonce'], 'hilal_reject_report_' . $post_id ) ) {
-            wp_die( __( 'Invalid request.', 'hilal' ) );
+        // Security checks: nonce verification and capability check
+        if ( ! $post_id ) {
+            wp_die( __( 'Invalid post ID.', 'hilal' ) );
+        }
+
+        if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'hilal_reject_report_' . $post_id ) ) {
+            wp_die( __( 'Security check failed.', 'hilal' ) );
+        }
+
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            wp_die( __( 'You do not have permission to perform this action.', 'hilal' ) );
         }
 
         Hilal_Sighting_Report::update_status( $post_id, 'rejected', '', get_current_user_id() );
 
-        wp_redirect( admin_url( 'edit.php?post_type=sighting_report&rejected=1' ) );
+        wp_safe_redirect( admin_url( 'edit.php?post_type=sighting_report&rejected=1' ) );
         exit;
     }
 

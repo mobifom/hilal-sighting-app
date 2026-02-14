@@ -779,7 +779,7 @@ class Hilal_Prayer_Times_API extends Hilal_API_Base {
      *
      * @return array
      */
-    private function get_nz_mosques() {
+    public function get_nz_mosques() {
         return array(
             // WHANGAREI
             array(
